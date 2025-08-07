@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delicious Delights - Home</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(40, 27, 27, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            background: rgba(0, 0, 0, 0.98);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #e74c3c;
+            text-decoration: none;
+            width: 200px;
+            border-radius: 5px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #ffffff;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #e74c3c;
+        }
+
+        .nav-links a.active {
+            color: #e74c3c;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: #e74c3c;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        /* Mobile menu toggle */
+        .mobile-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 4px;
+        }
+
+        .mobile-toggle span {
+            width: 25px;
+            height: 3px;
+            background: #333;
+            transition: 0.3s;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(135deg, rgba(44, 28, 26, 0.8), rgba(0, 0, 0, 0.8)),
+                        url('/background.jpeg') center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 0 2rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 3rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Page Content */
+        .page-content {
+            display: none;
+            min-height: 100vh;
+            /* padding: 20px 0 4rem; */
+        }
+
+        .page-content.active {
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .page-header h1 {
+            font-size: 3.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.3rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .content-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-image {
+            height: 250px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .card-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+            color: white;
+            padding: 2rem;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .content-card:hover .card-overlay {
+            transform: translateY(0);
+        }
+
+        .card-content {
+            padding: 2rem;
+        }
+
+        .card-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .card-content p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.8s ease;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 80px);
+                background: rgba(255, 255, 255, 0.98);
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
+                padding-top: 2rem;
+                transition: left 0.3s ease;
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .mobile-toggle {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.2rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 80%;
+                max-width: 250px;
+            }
+
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .nav-container {
+                padding: 0 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="#" ><img src="/Logo.jpeg" class="logo" alt="The Shakespear" srcset=""></a>
+            <!-- <ul class="nav-links" id="nav-links">
+                <li><a href="#" class="nav-link active" data-page="home">Home</a></li>
+                <li><a href="#" class="nav-link" data-page="desserts">Desserts</a></li>
+                <li><a href="#" class="nav-link" data-page="beverages">Beverages</a></li>
+                <li><a href="#" class="nav-link" data-page="korean">Korean Food</a></li>
+            </ul> -->
+            <div class="mobile-toggle" id="mobile-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="home" class="page-content active">
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Welcome to The Shakespear</h1>
+                <p>Discover amazing Korean foods from around the world</p>
+                <div class="hero-buttons">
+                    <a href="#" class="btn" data-page="desserts">Korean Food</a>
+                    <a href="#" class="btn" data-page="beverages">Desserts</a>
+                    <a href="#" class="btn" data-page="korean">Beverages</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Desserts Page -->
+    <div id="desserts" class="page-content">
+        <div class="container">
+            <div class="page-header fade-in">
+                <h1>Sweet Desserts</h1>
+                <p>Indulge in our collection of heavenly desserts that will satisfy your sweet tooth</p>
+            </div>
+            <div class="content-grid">
+                <div class="content-card fade-in">
+                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80')">
+                        <div class="card-overlay">
+                            <h3>Decadent Chocolate Cake</h3>
+                            <p>Rich, moist chocolate layers with velvety ganache</p>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Chocolate Heaven</h3>
+                        <p>Experience pure bliss with our signature chocolate cake, made with premium Belgian cocoa and topped with silky smooth chocolate ganache.</p>
+                    </div>
+                </div>
+                <div class="content-card fade-in">
+                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80')">
+                        <div class="card-overlay">
+                            <h3>Fresh Berry Tart</h3>
+                            <p>Buttery crust filled with seasonal berries</p>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Berry Delight</h3>
+                        <p>A perfect harmony of crispy pastry and fresh seasonal berries, topped with a light custard cream that melts in your mouth.</p>
+                    </div>
+                </div>
+                <div class="content-card fade-in">
+                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1551024506-0bccd828d307?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80')">
+                        <div class="card-overlay">
+                            <h3>Classic Cheesecake</h3>
+                            <p>Creamy New York style cheesecake</p>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Creamy Perfection</h3>
+                        <p>Our classic New York style cheesecake with a graham cracker crust, topped with your choice of berry compote or caramel sauce.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Beverages Page -->
+    <div id="beverages" class="page-content">
+        <div class="container">
+            <div class="page-header fade-in">
+                <h1>Refreshing Beverages</h1>
+                <p>Quench your thirst with our carefully crafted drinks and beverages</p>
+            </div>
+            <div class="content-grid">
+                <div class="content-card fade-in">
+                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1544787219-7f47ccb76574?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80')">
+                        <div class="card-overlay">
+                            <h3>Artisan Coffee</h3>
+                            <p>Premium beans, expertly roasted</p>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Coffee Excellence</h3>
+                        <p>Start your day with our carefully selected coffee beans, roasted to perfection and brewed with precision for the ultimate coffee experience.</p>
+                    </div>
+                </div>
+                <div class="content-card fade-in">
+                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1556679343-c7306c1976bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80')">
+                        <div class="card-overlay">
+                            <h3>Fresh Smoothies</h3>
+                            <p>Nutritious and delicious fruit blends</p>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Healthy Refreshment</h3>
+                        <p>Energize your body with our fresh fruit smoothies, packed with vitamins and natural goodness from the finest seasonal fruits.</p>
+                    </div>
+                </div>
+                <div class="content-card fade-in">
+                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1571934811356-5cc061b6821f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80')">
+                        <div class="card-overlay">
+                            <h3>Craft Cocktails</h3>
+                            <p>Signature drinks with premium spirits</p>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Evening Elegance</h3>
+                        <p>Unwind with our handcrafted cocktails, made with premium spirits and fresh ingredients, perfectly balanced for a memorable experience.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Korean Food Page -->
+    <div id="korean" class="page-content">
+        <div class="container">
+            <div class="page-header fade-in">
+                <h1>Korean Cuisine</h1>
+                <p>Discover the rich flavors and traditions of authentic Korean cooking</p>
+            </div>
+            <div class="content-grid">
+                <div class="content-card fade-in">
+                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1498654896293-37aacf113fd9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80')">
+                        <div class="card-overlay">
+                            <h3>Authentic Kimchi</h3>
+                            <p>Traditional fermented vegetables</p>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Fermented Perfection</h3>
+                        <p>Experience the authentic taste of Korea with our traditional kimchi, fermented to perfection with the finest ingredients and time-honored techniques.</p>
+                    </div>
+                </div>
+                <div class="content-card fade-in">
+                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1590301157890-4810ed352733?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80')">
+                        <div class="card-overlay">
+                            <h3>Korean BBQ</h3>
+                            <p>Grilled meats with traditional sides</p>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Grilled to Perfection</h3>
+                        <p>Savor the smoky flavors of Korean BBQ with premium cuts of meat, marinated in traditional sauces and served with banchan side dishes.</p>
+                    </div>
+                </div>
+                <div class="content-card fade-in">
+                    <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1569718212165-3a8278d5f624?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80')">
+                        <div class="card-overlay">
+                            <h3>Bibimbap Bowl</h3>
+                            <p>Mixed rice with fresh vegetables</p>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <h3>Colorful Harmony</h3>
+                        <p>Enjoy the perfect balance of flavors and nutrition with our signature bibimbap, featuring fresh vegetables, rice, and your choice of protein.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation functionality
+        const navLinks = document.querySelectorAll('.nav-link');
+        const heroButtons = document.querySelectorAll('.btn[data-page]');
+        const pages = document.querySelectorAll('.page-content');
+        const mobileToggle = document.getElementById('mobile-toggle');
+        const navLinksContainer = document.getElementById('nav-links');
+        const navbar = document.getElementById('navbar');
+
+        // Mobile menu toggle
+        mobileToggle.addEventListener('click', () => {
+            navLinksContainer.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!navLinksContainer.contains(e.target) && !mobileToggle.contains(e.target)) {
+                navLinksContainer.classList.remove('active');
+            }
+        });
+
+        // Page navigation
+        function showPage(pageId) {
+            // Hide all pages
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+            
+            // Update active nav link
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            const activeLink = document.querySelector(`[data-page="${pageId}"]`);
+            if (activeLink && activeLink.classList.contains('nav-link')) {
+                activeLink.classList.add('active');
+            }
+            
+            // Close mobile menu
+            navLinksContainer.classList.remove('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // Add click listeners to nav links
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageId = link.getAttribute('data-page');
+                showPage(pageId);
+            });
+        });
+
+        // Add click listeners to hero buttons
+        heroButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageId = button.getAttribute('data-page');
+                showPage(pageId);
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Fade in animation for content cards
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all fade-in elements
+        document.querySelectorAll('.fade-in').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            observer.observe(el);
+        });
+
+        // Initialize page
+        showPage('home');
+    </script>
+</body>
+</html>
